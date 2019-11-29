@@ -1,6 +1,3 @@
-
-const { html, body, div, span } = require('./html');
-
 const statelessNode = function(name) {
   return [show(div({ class: 'hidden' }, name), false), show(div({ class: 'shown' }, name), true)];
 };
@@ -11,13 +8,14 @@ function show(child, shown=true) {
 
 const statefulNode1 = function(name) {
   this.name = name;
+    this.left = 0;
   setTimeout(() => {
-    this.name = 'poopoo';
+    this.left += 1;
     this.change();
-  }, 1000);
+  }, 100);
 
   this.render = function() {
-    return div({ class: 'stateful' }, this.name).render();
+      return div({ class: 'stateful', style: `left: ${this.left}px` }, this.name).render();
   };
 };
 
@@ -32,7 +30,12 @@ const statefulNode2 = function(name) {
   };
 };
 
-const instance = html(body(div({ class: 'root' }, [statelessNode('Julien'), new statefulNode1('Julien'), new statefulNode2('poopoopoo')])));
+const instance = div({ class: 'root' }, [statelessNode('Julien'), new statefulNode1('Julien'), new statefulNode2('poopoopoo')]);
 
-console.log(instance.render());
-instance.change = function() { console.log(this.render()); };
+instance.change = function() {
+    const app = document.getElementById('app');
+    app.innerHTML = '';
+    app.appendChild(this.render());
+};
+
+instance.change();
