@@ -24,7 +24,7 @@ module.exports = new Proxy(
 
         children.forEach((child) => {
           child.parent = compo;
-          child.change = function() { this.parent.change(); }
+          child.change = function() { this.parent.change(); };
         });
 
         return compo;
